@@ -48,10 +48,9 @@ export function TranslateButton(chatBoxProps: Props) {
     if (chatBoxProps.type.analyticsName !== "normal") return null;
 
 
-    const { shouldTranslate } = settings.use(["shouldTranslate"]);
-    const toggle = () => settings.store.shouldTranslate = !settings.store.shouldTranslate;
+    const { shouldTranslateBeforeSending } = settings.use(["shouldTranslateBeforeSending"]);
+    const toggle = () => settings.store.shouldTranslateBeforeSending = !settings.store.shouldTranslateBeforeSending;
 
-    console.log(shouldTranslate);
 
     return (
         <popoutMod.Popout
@@ -69,7 +68,7 @@ export function TranslateButton(chatBoxProps: Props) {
             {(popoutProps: PopoutProps, otherPorps: OtherProps) => {
                 console.log(popoutProps, otherPorps);
                 return (
-                    shouldTranslate
+                    shouldTranslateBeforeSending
                         ? <Tooltip text="hi">
                             {(tooltipProps: any) => (
                                 <div style={{ display: "flex" }}>
@@ -82,7 +81,7 @@ export function TranslateButton(chatBoxProps: Props) {
                                         innerClassName={ButtonWrapperClasses.button}
                                         style={{ padding: "0 8px" }}
                                     >
-                                        <TranslateIcon untranslate={!shouldTranslate} />
+                                        <TranslateIcon untranslate={!shouldTranslateBeforeSending} />
                                     </Button>
                                 </div>
                             )}
@@ -95,7 +94,7 @@ export function TranslateButton(chatBoxProps: Props) {
                             innerClassName={ButtonWrapperClasses.button}
                             style={{ padding: "0 8px" }}
                         >
-                            <TranslateIcon untranslate={!shouldTranslate} />
+                            <TranslateIcon untranslate={!shouldTranslateBeforeSending} />
                         </Button>
                 );
             }}

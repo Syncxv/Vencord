@@ -22,13 +22,24 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { TranslateButton } from "./components/TranslateButton";
-
+import { translationEngines } from "./constants";
+import * as TranslateAPI from "./TranslateAPI";
 export const settings = definePluginSettings({
-    shouldTranslate: {
+    shouldTranslateBeforeSending: {
         type: OptionType.BOOLEAN,
         default: false,
-        description: "Toggle translate",
-    }
+        description: "Translate your messages before sending them",
+    },
+
+    engines: {
+        type: OptionType.SELECT,
+        default: translationEngines.googleapi.id,
+        description: "Select translate engine",
+        options: Object.values(translationEngines).map(engine => ({
+            label: engine.name,
+            value: engine.id,
+        })),
+    },
 });
 
 export default definePlugin({
@@ -46,6 +57,7 @@ export default definePlugin({
     ],
 
     settings: settings,
+    TranslateAPI,
 
     translateIcon: ErrorBoundary.wrap(TranslateButton, { noop: true })
 
