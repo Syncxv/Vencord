@@ -22,14 +22,13 @@ import { Button, ButtonLooks, ButtonWrapperClasses, Tooltip } from "@webpack/com
 
 import { settings } from "../index";
 import { TranslateIcon } from "./TranslateIcon";
+import { TranslateOptions } from "./TranslateOptions";
 
 interface Props {
     type: {
         analyticsName: string;
     };
 }
-
-const popoutMod = findByPropsLazy("Popout");
 
 interface PopoutProps {
     "aria-controls"?: string;
@@ -38,11 +37,13 @@ interface PopoutProps {
     onMouseDown: React.MouseEventHandler<HTMLButtonElement>;
     onKeyDown: React.KeyboardEventHandler<HTMLButtonElement>;
 }
-
-interface OtherProps {
+// naming things is hard
+interface PopoutOtherProps {
     isShown: false,
     position: "top" | "bottom" | "left" | "right";
 }
+
+const popoutMod = findByPropsLazy("Popout");
 
 export function TranslateButton(chatBoxProps: Props) {
     if (chatBoxProps.type.analyticsName !== "normal") return null;
@@ -54,18 +55,13 @@ export function TranslateButton(chatBoxProps: Props) {
 
     return (
         <popoutMod.Popout
-            renderPopout={({ closePopout }) => (
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                    <h1>hey</h1>
-                    <Button onClick={closePopout}>Close</Button>
-                </div>
-            )}
+            renderPopout={({ closePopout }) => <TranslateOptions closePopout={closePopout} />}
             position="bottom"
             animation={popoutMod.Popout.Animation.NONE}
-            align="left"
+            align="right"
         >
 
-            {(popoutProps: PopoutProps, otherPorps: OtherProps) => {
+            {(popoutProps: PopoutProps, otherPorps: PopoutOtherProps) => {
                 console.log(popoutProps, otherPorps);
                 return (
                     shouldTranslateBeforeSending
@@ -81,7 +77,7 @@ export function TranslateButton(chatBoxProps: Props) {
                                         innerClassName={ButtonWrapperClasses.button}
                                         style={{ padding: "0 8px" }}
                                     >
-                                        <TranslateIcon untranslate={!shouldTranslateBeforeSending} />
+                                        <TranslateIcon translateMessage={shouldTranslateBeforeSending} />
                                     </Button>
                                 </div>
                             )}
@@ -94,7 +90,7 @@ export function TranslateButton(chatBoxProps: Props) {
                             innerClassName={ButtonWrapperClasses.button}
                             style={{ padding: "0 8px" }}
                         >
-                            <TranslateIcon untranslate={!shouldTranslateBeforeSending} />
+                            <TranslateIcon translateMessage={shouldTranslateBeforeSending} />
                         </Button>
                 );
             }}
