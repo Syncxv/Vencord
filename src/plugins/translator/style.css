@@ -1,0 +1,15 @@
+.tl-wrapper {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--background-secondary);
+}
+
+.tl-select-item {
+    margin-bottom: 8px;
+}
+
+.tl-select-item .tl-description {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}

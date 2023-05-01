@@ -18,12 +18,15 @@
 
 import { Forms, Select, useState } from "@webpack/common";
 
-import { translationEngines } from "../constants";
+import { LanguageTypes, MessageTypes, translationEngines } from "../constants";
 import { settings } from "../index";
 import { TranslateData } from "../TranslateAPI";
 interface Props {
     closePopout: () => void;
 }
+const getKey = (type, langType) => `${type}_${langType}`;
+
+
 export const TranslateOptions: React.FC<Props> = ({ closePopout }) => {
     const [data, setData] = useState<TranslateData>({
         input: {
@@ -37,53 +40,74 @@ export const TranslateOptions: React.FC<Props> = ({ closePopout }) => {
         text: "hehe"
 
     });
+
+
+
+
     return (
         <div
-            style={{
-                padding: "1rem",
-                borderRadius: "8px",
-                backgroundColor: "var(--background-secondary)"
-            }}
             className="tl-wrapper"
         >
-            <Forms.FormSection>
-                <Forms.FormTitle tag="h3">Translate</Forms.FormTitle>
-                <SettingSelectComponent description="Input Language" options={translationEngines[settings.store.engines!].languages.map(l => ({ label: l, value: l }))} onChange={() => { }} />
-            </Forms.FormSection>
-
-
+            <Forms.FormTitle tag="h3">Translate</Forms.FormTitle>
+            {Object.values(MessageTypes).map(type => {
+                return Object.values(LanguageTypes).map(langType => {
+                    return (
+                        <LanguageSelectComponent
+                            type={type}
+                            langType={langType}
+                            description={`${type} ${langType} language in ${type} messages`}
+                        />
+                    );
+                });
+            })}
         </div>
     );
 };
 
 
 interface SettingSelectProps {
+    type: string,
+    langType: string,
     description: string;
-    options: { label: string; value: string; }[];
-    def?: string;
-    onChange: (value: string) => void;
+    // options: { label: string; value: string; }[];
+    onChange?: (value: string) => void;
 }
 
-export const SettingSelectComponent: React.FC<SettingSelectProps> = ({ options, def, description, onChange }) => {
+export const LanguageSelectComponent: React.FC<SettingSelectProps> = ({ type, langType, description, onChange }) => {
 
-    const [state, setState] = useState<string | undefined>(def);
+    const key = getKey(type, langType);
+    // const { data, updateData } = useIndexedDB<string>(key);
+    const [selectedValue, setSelectedValue] = useState<string | null>(null);
 
+    // useEffect(() => {
+    //     // Update the local state when data from IndexedDB changes
+    //     setSelectedValue(data);
+    // }, [data]);
 
+    const handleChange = (newValue: string) => {
+        setSelectedValue(newValue);
+
+        // await updateData(newValue);
+    };
     return (
-        <Forms.FormSection>
-            <Forms.FormTitle>{description}</Forms.FormTitle>
+        <Forms.FormSection className="tl-select-item">
+            <div className="tl-description">
+                <Forms.FormText>{description}</Forms.FormText>
+            </div>
             <Select
+                key={key}
                 isDisabled={false}
-                options={options}
+                options={translationEngines[settings.store.engine!].languages.map(l => ({ label: `${l.englishName} ${l.nativeName != null ? `(${l.nativeName})` : ""}`, value: l.id }))}
                 placeholder="Select an option"
                 maxVisibleItems={5}
                 closeOnSelect={true}
                 select={v => {
-                    setState(v);
-                    onChange(v);
+                    console.log(v);
+                    handleChange(v);
+                    onChange != null && onChange(v);
                 }}
-                isSelected={v => v === state}
-                serialize={v => String(v)}
+                isSelected={v => v === selectedValue}
+                serialize={v => v}
             />
         </Forms.FormSection>
     );

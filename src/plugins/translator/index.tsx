@@ -17,13 +17,17 @@
 */
 
 import { definePluginSettings } from "@api/settings";
+import { disableStyle, enableStyle } from "@api/Styles";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { TranslateButton } from "./components/TranslateButton";
 import { translationEngines } from "./constants";
+import style from "./style.css?managed";
 import * as TranslateAPI from "./TranslateAPI";
+
+
 export const settings = definePluginSettings({
     shouldTranslateBeforeSending: {
         type: OptionType.BOOLEAN,
@@ -31,7 +35,7 @@ export const settings = definePluginSettings({
         description: "Translate your messages before sending them",
     },
 
-    engines: {
+    engine: {
         type: OptionType.SELECT,
         default: translationEngines.googleapi.id,
         description: "Select translate engine",
@@ -59,7 +63,14 @@ export default definePlugin({
     settings: settings,
     TranslateAPI,
 
-    translateIcon: ErrorBoundary.wrap(TranslateButton, { noop: true })
+    translateIcon: ErrorBoundary.wrap(TranslateButton, { noop: true }),
 
 
+    start() {
+        enableStyle(style);
+    },
+
+    stop() {
+        disableStyle(style);
+    }
 });
