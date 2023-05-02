@@ -17,8 +17,9 @@
 */
 
 
+import { LazyComponent } from "@utils/misc";
 import { findByPropsLazy } from "@webpack";
-import { Button, ButtonLooks, ButtonWrapperClasses, Tooltip } from "@webpack/common";
+import { Button, ButtonLooks, ButtonWrapperClasses, React, Tooltip } from "@webpack/common";
 
 import { settings } from "../index";
 import { TranslateIcon } from "./TranslateIcon";
@@ -45,6 +46,8 @@ interface PopoutOtherProps {
 
 const popoutMod = findByPropsLazy("Popout");
 
+const MemoizedTranslateOptions = LazyComponent(() => React.memo(TranslateOptions));
+
 export function TranslateButton(chatBoxProps: Props) {
     if (chatBoxProps.type.analyticsName !== "normal") return null;
 
@@ -55,7 +58,7 @@ export function TranslateButton(chatBoxProps: Props) {
 
     return (
         <popoutMod.Popout
-            renderPopout={({ closePopout }) => <TranslateOptions closePopout={closePopout} />}
+            renderPopout={({ closePopout }) => <MemoizedTranslateOptions closePopout={closePopout} />}
             position="bottom"
             animation={popoutMod.Popout.Animation.NONE}
             align="right"
@@ -98,4 +101,5 @@ export function TranslateButton(chatBoxProps: Props) {
     );
 
 }
+
 

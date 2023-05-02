@@ -23,6 +23,7 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { TranslateButton } from "./components/TranslateButton";
+import { TranslateOptions } from "./components/TranslateOptions";
 import { translationEngines } from "./constants";
 import style from "./style.css?managed";
 import * as TranslateAPI from "./TranslateAPI";
@@ -44,6 +45,12 @@ export const settings = definePluginSettings({
             value: engine.id,
         })),
     },
+
+    test: {
+        description: " hey",
+        type: OptionType.COMPONENT,
+        component: () => <TranslateOptions closePopout={() => { }} />,
+    }
 });
 
 export default definePlugin({
@@ -58,6 +65,14 @@ export default definePlugin({
                 replace: "$&;try{$2||$1.push($self.translateIcon(arguments[0]))}catch{}",
             }
         },
+
+        {
+            find: "Le.ZP)({",
+            replacement: {
+                match: /(function il\(e\){.{1,1000})isEnabled:!0,wrap:!0/,
+                replace: "$1isEnabled:false,wrap:false"
+            }
+        }
     ],
 
     settings: settings,
