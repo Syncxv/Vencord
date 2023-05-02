@@ -66,11 +66,12 @@ export default definePlugin({
             }
         },
 
+        // fixes focus issues when having nested popouts
         {
-            find: "Le.ZP)({",
+            find: "♫ (つ｡◕‿‿◕｡)つ ♪",
             replacement: {
-                match: /(function il\(e\){.{1,1000})isEnabled:!0,wrap:!0/,
-                replace: "$1isEnabled:false,wrap:false"
+                match: /(function \i\(\i\){.{1,1000}renderOptionLabel.{1,500})isEnabled:!0,wrap:!0/,
+                replace: "$1isEnabled:false,wrap:true,"
             }
         }
     ],
