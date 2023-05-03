@@ -18,6 +18,7 @@
 
 
 import { LazyComponent } from "@utils/misc";
+import { openModal } from "@utils/modal";
 import { findByPropsLazy } from "@webpack";
 import { Button, ButtonLooks, ButtonWrapperClasses, React, Tooltip } from "@webpack/common";
 
@@ -48,6 +49,9 @@ const popoutMod = findByPropsLazy("Popout");
 
 const MemoizedTranslateOptions = LazyComponent(() => React.memo(TranslateOptions));
 
+const openTranslateModal = () => {
+    openModal(props => <MemoizedTranslateOptions modalProps={props} />);
+};
 export function TranslateButton(chatBoxProps: Props) {
     if (chatBoxProps.type.analyticsName !== "normal") return null;
 
@@ -57,47 +61,32 @@ export function TranslateButton(chatBoxProps: Props) {
 
 
     return (
-        <popoutMod.Popout
-            renderPopout={({ closePopout }) => <MemoizedTranslateOptions closePopout={closePopout} />}
-            position="bottom"
-            animation={popoutMod.Popout.Animation.NONE}
-            align="right"
-        >
-
-            {(popoutProps: PopoutProps, otherPorps: PopoutOtherProps) => {
-                console.log(popoutProps, otherPorps);
-                return (
-                    shouldTranslateBeforeSending
-                        ? <Tooltip text="hi">
-                            {(tooltipProps: any) => (
-                                <div style={{ display: "flex" }}>
-                                    <Button
-                                        {...tooltipProps}
-                                        {...popoutProps}
-                                        onContextMenu={toggle}
-                                        size=""
-                                        look={ButtonLooks.BLANK}
-                                        innerClassName={ButtonWrapperClasses.button}
-                                        style={{ padding: "0 8px" }}
-                                    >
-                                        <TranslateIcon translateMessage={shouldTranslateBeforeSending} />
-                                    </Button>
-                                </div>
-                            )}
-                        </Tooltip>
-                        : <Button
-                            {...popoutProps}
-                            onContextMenu={toggle}
-                            size=""
-                            look={ButtonLooks.BLANK}
-                            innerClassName={ButtonWrapperClasses.button}
-                            style={{ padding: "0 8px" }}
-                        >
-                            <TranslateIcon translateMessage={shouldTranslateBeforeSending} />
-                        </Button>
-                );
-            }}
-        </popoutMod.Popout>
+        shouldTranslateBeforeSending
+            ? <Tooltip text="hi">
+                {(tooltipProps: any) => (
+                    <Button
+                        {...tooltipProps}
+                        onClick={openTranslateModal}
+                        onContextMenu={toggle}
+                        size=""
+                        look={ButtonLooks.BLANK}
+                        innerClassName={ButtonWrapperClasses.button}
+                        style={{ padding: "0 8px" }}
+                    >
+                        <TranslateIcon translateMessage={shouldTranslateBeforeSending} />
+                    </Button>
+                )}
+            </Tooltip>
+            : <Button
+                onClick={openTranslateModal}
+                onContextMenu={toggle}
+                size=""
+                look={ButtonLooks.BLANK}
+                innerClassName={ButtonWrapperClasses.button}
+                style={{ padding: "0 8px" }}
+            >
+                <TranslateIcon translateMessage={shouldTranslateBeforeSending} />
+            </Button>
     );
 
 }

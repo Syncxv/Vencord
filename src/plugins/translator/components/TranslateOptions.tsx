@@ -16,36 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+import { ModalProps, ModalRoot } from "@utils/modal";
 import { Forms, Select, useState } from "@webpack/common";
 
 import { LanguageTypes, MessageTypes, translationEngines } from "../constants";
 import { settings } from "../index";
-import { TranslateData } from "../TranslateAPI";
 interface Props {
-    closePopout: () => void;
+    modalProps: ModalProps;
 }
 const getKey = (type, langType) => `${type}_${langType}`;
 
 
-export const TranslateOptions: React.FC<Props> = ({ closePopout }) => {
-    const [data, setData] = useState<TranslateData>({
-        input: {
-            name: "",
-            id: ""
-        },
-        output: {
-            name: "",
-            id: ""
-        },
-        text: "hehe"
-
-    });
-
-
-
-
+export const TranslateOptions: React.FC<Props> = ({ modalProps }) => {
     return (
-        <div
+        <ModalRoot {...modalProps}
             className="tl-wrapper"
         >
             <Forms.FormTitle tag="h3">Translate</Forms.FormTitle>
@@ -60,7 +44,7 @@ export const TranslateOptions: React.FC<Props> = ({ closePopout }) => {
                     );
                 });
             })}
-        </div>
+        </ModalRoot>
     );
 };
 

@@ -23,14 +23,14 @@ export const getLanguages = (langs: string[], auto: boolean): Language[] => {
 
     const englishLanguageNames = new Intl.DisplayNames(["en"], { type: "language" });
 
-    const nativeLanguageNames = langs.reduce((acc, lang) => {
+    const nativeLanguageNames = langs.reduce<{ [key: string]: Intl.DisplayNames; }>((acc, lang) => {
         try {
             acc[lang] = new Intl.DisplayNames([lang], { type: "language" });
         } catch (error) {
             console.warn(`Unsupported language: ${lang}`);
         }
         return acc;
-    }, {} as { [key: string]: Intl.DisplayNames; });
+    }, {});
 
 
     const languageNames: Language[] = langs

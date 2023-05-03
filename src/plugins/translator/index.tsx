@@ -23,7 +23,6 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 
 import { TranslateButton } from "./components/TranslateButton";
-import { TranslateOptions } from "./components/TranslateOptions";
 import { translationEngines } from "./constants";
 import style from "./style.css?managed";
 import * as TranslateAPI from "./TranslateAPI";
@@ -45,12 +44,6 @@ export const settings = definePluginSettings({
             value: engine.id,
         })),
     },
-
-    test: {
-        description: " hey",
-        type: OptionType.COMPONENT,
-        component: () => <TranslateOptions closePopout={() => { }} />,
-    }
 });
 
 export default definePlugin({
