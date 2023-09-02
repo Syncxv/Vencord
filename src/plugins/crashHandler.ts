@@ -38,7 +38,15 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "Whether to attempt to navigate to the home when preventing Discord crashes.",
         default: false
-    }
+    },
+
+    // crash: {
+    //     type: OptionType.COMPONENT,
+    //     description: "Crash the app",
+    //     component: () => {
+    //         return React.createElement(Button, { onClick: () => openModal(() => { throw Error; }) }, "Crash");
+    //     }
+    // }
 });
 
 let crashCount: number = 0;
@@ -66,8 +74,8 @@ export default definePlugin({
         {
             find: 'dispatch({type:"MODAL_POP_ALL"})',
             replacement: {
-                match: /"MODAL_POP_ALL".+?};(?<=(\i)=function.+?)/,
-                replace: (m, popAll) => `${m}$self.popAllModals=${popAll};`
+                match: /(,popAll:)(function\(\){)/,
+                replace: "$1 $self.popAllModals = $2"
             }
         }
     ],
